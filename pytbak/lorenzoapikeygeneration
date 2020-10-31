@@ -1,0 +1,1 @@
+  kubectl create secret generic lorenzo-apikey --from-literal=kongCredType=key-auth --from-literal=key=lorenzo -n pytbak

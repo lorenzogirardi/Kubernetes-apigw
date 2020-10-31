@@ -1,0 +1,16 @@
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: konga-ing
+  namespace: konga
+spec:
+  rules:
+  - host: konga.ing.h4x0r3d.lan
+    http:
+      paths:
+      - backend:
+          serviceName: konga-svc
+          servicePort: 443
+        path: /

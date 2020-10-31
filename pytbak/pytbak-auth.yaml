@@ -1,0 +1,6 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: pytbak-key-auth
+  namespace: pytbak 
+plugin: key-auth

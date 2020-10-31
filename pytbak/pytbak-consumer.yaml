@@ -1,0 +1,11 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongConsumer
+metadata:
+  name: pytbak-consumer
+  namespace: pytbak
+  annotations:
+    kubernetes.io/ingress.class: kong
+    konghq.com/plugins: pytbak-rate
+username: lorenzo
+credentials: 
+- lorenzo-apikey

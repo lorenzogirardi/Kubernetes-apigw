@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: pytbak-ingress
+  namespace: pytbak
+  annotations:
+    ingress.kubernetes.io/proxy-connect-timeout: "10"
+    ingress.kubernetes.io/proxy-read-timeout: "30"
+    ingress.kubernetes.io/proxy-send-timeout: "30"
+spec:
+  rules:
+  - host: pytbak.ing.h4x0r3d.lan
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: pytbak-svc
+          servicePort: 5000

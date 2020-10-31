@@ -1,0 +1,6 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: pytbak-jwt
+  namespace: pytbak 
+plugin: jwt
