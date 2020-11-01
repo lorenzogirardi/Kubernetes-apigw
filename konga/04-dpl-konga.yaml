@@ -26,14 +26,57 @@ spec:
         track: konga-stable
     spec:
       containers:
-      - env:
+      - name: konga
+        image: pantsel/konga
+        env:
         - name: NODE_TLS_REJECT_UNAUTHORIZED
           value: "0"
         - name: NODE_ENV
           value: "production"
-        name: konga
-        image: pantsel/konga
+        - name: DB_ADAPTER
+          value: postgres
+        - name: DB_HOST
+          value: localhost
+        - name: DB_USER
+          value: kongadbuser
+        - name: DB_PASSWORD
+          value: k0ngadbp4ssword
+        - name: DB_DATABASE
+          value: kongadb
         ports:
         - name: http
           containerPort: 1337
           protocol: TCP
+      - name: postgres
+        image: postgres:9.6
+        ports: 
+          - containerPort: 5432
+        env:
+          - name: POSTGRES_DB
+            value: kongadb
+          - name: POSTGRES_USER
+            value: kongadbuser 
+          - name: POSTGRES_PASSWORD
+            value: k0ngadbp4ssword
+        volumeMounts:
+          - mountPath: "/var/lib/postgresql/data"
+            name: konga-pgdata
+      volumes:
+        - name: konga-pgdata
+          persistentVolumeClaim:
+            claimName: konga-pv-claim
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: konga
+  name: konga-pv-claim
+  labels:
+    app: konga-storage-claim
+spec:
+  storageClassName: microk8s-hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 200Mi
