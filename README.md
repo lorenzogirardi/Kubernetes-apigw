@@ -165,8 +165,10 @@ briefly recap the application answer on /api/ with the main html page with metho
 ## Configuration
 
 Let's start to work...  
-I've used the public kong deployment with some changes
-to have the database where store the configurations.   
+I've used the public kong deployment with some changes to have the database where store the configurations.
+
+Another trick is create it as a secondary *ingress* , since i've already
+and ingress in my ingrastructure , kong is done to answer on different ports
 
 All the yaml are subdivided per role
 
@@ -264,6 +266,71 @@ kube-system    hostpath-provisioner-5c65fbdb4f-f5qsb      1/1     Running     6 
 NAME                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS        AGE
 datadir-postgres-0   Bound    pvc-8c5791c3-939f-4457-b5fb-74ac417ca3d7   250Mi        RWO                 k8s-hostpath   7d
 ```
+<br></br>
+
+Now i'd like to have also an Admin UI, i'm not fan of web ui ,  
+however i need to know if this interface could be shared outside IT  
+to delegate some business ownership and so on.
+
+Kong Enterprise has it's own web ui instead the community one needs a third party tool... [Konga](https://github.com/pantsel/konga)  
+
+In the same way of kong, konga needs a database , and in the same way i elaborated a bit the default deployment
+```
+konga
+|-- 01-ns-konga.yaml
+|-- 02-svc-konga.yaml
+|-- 03-ing-konga.yaml
+`-- 04-dpl-konga.yaml
+```
+
+just a couple of TIPS
+
+postgres persistent storage  
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: konga
+  name: konga-pv-claim
+  labels:
+    app: konga-storage-claim
+spec:
+  storageClassName: microk8s-hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 200Mi
+```
+
+and on deployment ...
+
+```
+        env:
+        - name: NODE_TLS_REJECT_UNAUTHORIZED
+          value: "0"
+        - name: NODE_ENV
+          value: "production"
+```
+
+where NODE_TLS_REJECT_UNAUTHORIZED is the option to not verify the kong api certificate and  
+NODE_ENV is way to enable production or development , if you are not using production, the other two option enables the debug model and increase the cpu usage, i suggest to use production anyway **during the first deploy you should enable development in order to bootstrap the sql schema** that production is not able to do ... or create an init container to deploy the schema
+
+```konga          konga-stable-8957b9d85-tq72z               2/2     Running     2          6d3h```
+
+since is now up and running it will be available on the standard infrastructure ingress  
+
+```
+  - host: konga.ing.h4x0r3d.lan
+```
+
+Konga Home
+![konga_home](https://res.cloudinary.com/ethzero/image/upload/c_scale,w_1024/v1604777237/misc/konga_ui.png "konga_home")   
+
+Konga node configuration
+![konga_node](https://res.cloudinary.com/ethzero/image/upload/c_scale,w_1024/v1604777238/misc/konga_ui_kongnode.png "konga_node")  
+
+
 
 
 
