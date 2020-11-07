@@ -330,19 +330,163 @@ Konga Home
 Konga node configuration
 ![konga_node](https://res.cloudinary.com/ethzero/image/upload/c_scale,w_1024/v1604777238/misc/konga_ui_kongnode.png "konga_node")  
 
+<br></br>
+
+- kong [INSTALLED]
+- konga [INSTALLED]
+- backend [INSTALLED]  
+
+First of all we need to expose the backend with Kong
+in this example i created an ingress configuration dedicated for this porpose
+
+```
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "kong"
+  name: api
+  namespace: pytbak
+  labels:
+    app: api
+spec:
+  rules:
+    - host: api.ing.h4x0r3d.lan
+      http:
+        paths:
+          - path: /api/
+            backend:
+              serviceName: pytbak-svc
+              servicePort: 5000
+          - path: /api/get/
+            backend:
+              serviceName: pytbak-svc
+              servicePort: 5000
+          - path: /api/post/
+            backend:
+              serviceName: pytbak-svc
+              servicePort: 5000
+          - path: /api/put/
+            backend:
+              serviceName: pytbak-svc
+              servicePort: 5000
+          - path: /api/delete/
+            backend:
+              serviceName: pytbak-svc
+              servicePort: 5000
+```
+
+```kubernetes.io/ingress.class: "kong" ``` to match the kong ingress on the backend application
+```namespace: pytbak```.  
+As you can see i created mutiple paths to simulate different applications behind and create different ruls per path/application/context.  
+
+The kong configuration could be applied with
+- kubernetes yaml
+- kong api
+- konga ui (only if you have the database)
+
+In the repo you will see some in kubernetes and some other not present , 
+i tested the three option and the **kong api** is the best one  
+
+<br></br>
+Create api user
+
+```curl -k -i -X POST --url https://192.168.1.14:31793/consumers/ --data "username=slow_user"```
+
+```
+HTTP/1.1 201 Created
+Date: Sat, 07 Nov 2020 19:46:05 GMT
+Content-Type: application/json; charset=utf-8
+Connection: keep-alive
+Access-Control-Allow-Origin: *
+Server: kong/2.1.4
+Content-Length: 121
+X-Kong-Admin-Latency: 16
+```
+
+```{"custom_id":null,"created_at":1604778365,"id":"3d45a73d-4024-4813-b356-43a14ecea702","tags":null,"username":"slow_user"}```
+![konga_consumer](https://res.cloudinary.com/ethzero/image/upload/c_scale,w_1024/v1604778903/misc/konga_consumer.png "konga_consumer")
+
+<br></br>
+add a key token with key-auth plugin  
+
+``` curl -k -i -X POST --url https://192.168.1.14:31793/consumers/slow_user/key-auth/ --data 'key=332d05445a560ee65a76aeaa372d8904' ```
+
+```
+HTTP/1.1 201 Created
+Date: Sat, 07 Nov 2020 19:51:03 GMT
+Content-Type: application/json; charset=utf-8
+Connection: keep-alive
+Access-Control-Allow-Origin: *
+Server: kong/2.1.4
+Content-Length: 190
+X-Kong-Admin-Latency: 10
+```
+
+```{"created_at":1604778663,"id":"52970ca8-848d-49b5-a16f-a235fe0e9ceb","tags":null,"ttl":null,"key":"332d05445a560ee65a76aeaa372d8904","consumer":{"id":"3d45a73d-4024-4813-b356-43a14ecea702"}}```
+![konga_consumer_cred](https://res.cloudinary.com/ethzero/image/upload/c_scale,w_1024/v1604778903/misc/konga_consumer_credential.png "konga_consumer_cred")
+
+<br></br>
+
+
+routes.id where created when we created the kong ingress configuration for pytbak 
+```curl -k -i -X GET https://192.168.1.14:31793/routes/```
+
+name: pytbak.api.00 &nbsp; path:/api/  &nbsp; route.id: 0a78b572-cfe0-4228-bdfe-639ef04b5117    
+name: pytbak.api.01 &nbsp; path:/api/get/  &nbsp; route.id: 8d2a24aa-636d-43ee-b0aa-b0fd1d3643fd  
+name: pytbak.api.02 &nbsp; path:/api/post/  &nbsp; route.id: f75ed3b6-07c3-4293-932b-4f53d0c38f74    
+name: pytbak.api.03 &nbsp; path:/api/put  &nbsp; route.id: f4823063-04e4-4da8-9c11-21977a93b1ba    
+name: pytbak.api.04 &nbsp; path:/api/delete  &nbsp; route.id: e396750c-9158-4a96-8d79-047197669cff  
+
+
+![konga_routes](https://res.cloudinary.com/ethzero/image/upload/c_scale,w_1024/v1604779720/misc/konga_routes.png "konga_routes")
+
+<br></br>
+now i'd like to limit the user slow_user to perform only 4 request per sec on /api/  
+and 2 on /api/get/
+
+```
+$ curl -k -X POST https://192.168.1.14:31793/plugins/ \
+>             --data "name=rate-limiting"  \
+>             --data "config.second=4" \
+>             --data "config.hour=1200" \
+>             --data "config.policy=local" \
+>             --data "consumer.id=3d45a73d-4024-4813-b356-43a14ecea702" \
+>             --data "route.id=0a78b572-cfe0-4228-bdfe-639ef04b5117"
+```
+```{"created_at":1604780031,"id":"cfd3d752-7864-493c-a3b7-3970ab6eca86","tags":null,"enabled":true,"protocols":["grpc","grpcs","http","https"],"name":"rate-limiting","consumer":{"id":"3d45a73d-4024-4813-b356-43a14ecea702"},"service":null,"route":{"id":"0a78b572-cfe0-4228-bdfe-639ef04b5117"},"config":{"hide_client_headers":false,"minute":null,"policy":"local","month":null,"redis_timeout":2000,"limit_by":"consumer","redis_password":null,"second":4,"day":null,"redis_database":0,"year":null,"hour":1200,"redis_host":null,"redis_port":6379,"header_name":null,"fault_tolerant":true}}```
 
 
 
+```
+curl -k -X POST https://192.168.1.14:31793/plugins/ \
+                --data "name=rate-limiting"  \
+                --data "config.second=2" \
+                --data "config.hour=600" \
+                --data "config.policy=local" \
+                --data "consumer.id=3d45a73d-4024-4813-b356-43a14ecea702" \
+                --data "route.id=8d2a24aa-636d-43ee-b0aa-b0fd1d3643fd" 
+```
+```{"created_at":1604780101,"id":"33bfc138-776a-4116-a2a9-8c70ab9d7a2a","tags":null,"enabled":true,"protocols":["grpc","grpcs","http","https"],"name":"rate-limiting","consumer":{"id":"3d45a73d-4024-4813-b356-43a14ecea702"},"service":null,"route":{"id":"8d2a24aa-636d-43ee-b0aa-b0fd1d3643fd"},"config":{"hide_client_headers":false,"minute":null,"policy":"local","month":null,"redis_timeout":2000,"limit_by":"consumer","redis_password":null,"second":2,"day":null,"redis_database":0,"year":null,"hour":600,"redis_host":null,"redis_port":6379,"header_name":null,"fault_tolerant":true}}```
 
+
+![konga_rate_routes](https://res.cloudinary.com/ethzero/image/upload/c_scale,w_1024/v1604780200/misc/konga_rate_limit_routes.png "konga_rate_routes")
 
 
 <br></br>
 
 ## Use cases
 
+
+
+
+
 <br></br>
 
 ## Validation
+
+
+
 
 <br></br>
 
