@@ -488,8 +488,8 @@ I created 2 users , one on the example above and a new one with a double of requ
 | /api/delete/ | 1                | 2                |
 
 
-slow_user has apikey: 332d05445a560ee65a76aeaa372d8904
-fast_user has apikey: 695aa0b18c6dbd1b387ee7c32c72c513
+slow_user has apikey: 332d05445a560ee65a76aeaa372d8904  
+fast_user has apikey: 695aa0b18c6dbd1b387ee7c32c72c513  
 
 
 
