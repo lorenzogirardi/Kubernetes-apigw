@@ -477,19 +477,125 @@ curl -k -X POST https://192.168.1.14:31793/plugins/ \
 
 ## Use cases
 
-I created 2 users , one on the example above and a new one with a double of requests per second
+I created 3 users , one on the example above and a new one with a double of requests per second
 
 | route        | slow_user rate/s | fast_user rate/s |
 |--------------|:----------------:|------------------|
-| /api/        | 4                | 10               |
-| /api/get/    | 2                | 5                |
+| /api/        | 4                | 8               |
+| /api/get/    | 2                | 4                |
 | /api/post/   | 1                | 2                |
 | /api/put/    | 1                | 2                |
-| /api/delete/ | 1                | 2                |
+| /api/delete/ | 1                | 2                |  
 
-
+<br></br>
 slow_user has apikey: 332d05445a560ee65a76aeaa372d8904  
-fast_user has apikey: 695aa0b18c6dbd1b387ee7c32c72c513  
+fast_user has apikey: 695aa0b18c6dbd1b387ee7c32c72c513   
+admin has a apikey: admin  
+
+<br></br>
+i've also created a global rules on the service  with max 9 reqquest per second for all other users with no specific rate limit rule applied (ex admin.)  
+
+```$ curl -k -X POST https://192.168.1.14:31793/plugins --data "name=rate-limiting" --data "config.second=9" --data "config.policy=local" --data "service.id=53d35e73-b285-4eb2-ad24-853d82563ca4" ```  
+
+```
+{"created_at":1604786501,"id":"34182311-ecbf-49a3-bdcf-bdc1c9c58706","tags":null,"enabled":true,"protocols":["grpc","grpcs","http","https"],"name":"rate-limiting","consumer":null,"service":{"id":"53d35e73-b285-4eb2-ad24-853d82563ca4"},"route":null,"config":{"hide_client_headers":false,"minute":null,"policy":"local","month":null,"redis_timeout":2000,"limit_by":"consumer","redis_password":null,"second":9,"day":null,"redis_database":0,"year":null,"hour":null,"redis_host":null,"redis_port":6379,"header_name":null,"fault_tolerant":true}}
+```
+
+Using siege i've benchmarked the users   
+
+
+![siege_users](https://res.cloudinary.com/ethzero/image/upload/c_scale,w_1280/v1604787270/misc/siege_users.png "siege_users")
+
+You can check the headers with curl  
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 658
+Connection: keep-alive
+Server: Werkzeug/1.0.1 Python/3.9.0
+Date: Sat, 07 Nov 2020 22:21:34 GMT
+X-RateLimit-Limit-Second: 4
+X-RateLimit-Remaining-Second: 3
+X-RateLimit-Limit-Hour: 1000000
+RateLimit-Limit: 4
+X-RateLimit-Remaining-Hour: 999755
+RateLimit-Remaining: 3
+RateLimit-Reset: 1
+X-Kong-Upstream-Latency: 3
+X-Kong-Proxy-Latency: 1
+Via: kong/2.1.4
+
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 658
+Connection: keep-alive
+Server: Werkzeug/1.0.1 Python/3.9.0
+Date: Sat, 07 Nov 2020 22:21:34 GMT
+X-RateLimit-Limit-Second: 4
+X-RateLimit-Remaining-Second: 2
+X-RateLimit-Limit-Hour: 1000000
+RateLimit-Limit: 4
+X-RateLimit-Remaining-Hour: 999754
+RateLimit-Remaining: 2
+RateLimit-Reset: 1
+X-Kong-Upstream-Latency: 3
+X-Kong-Proxy-Latency: 0
+Via: kong/2.1.4
+
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 658
+Connection: keep-alive
+Server: Werkzeug/1.0.1 Python/3.9.0
+Date: Sat, 07 Nov 2020 22:21:34 GMT
+X-RateLimit-Limit-Second: 4
+X-RateLimit-Remaining-Second: 1
+X-RateLimit-Limit-Hour: 1000000
+RateLimit-Limit: 4
+X-RateLimit-Remaining-Hour: 999753
+RateLimit-Remaining: 1
+RateLimit-Reset: 1
+X-Kong-Upstream-Latency: 3
+X-Kong-Proxy-Latency: 1
+Via: kong/2.1.4
+
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 658
+Connection: keep-alive
+Server: Werkzeug/1.0.1 Python/3.9.0
+Date: Sat, 07 Nov 2020 22:21:34 GMT
+X-RateLimit-Limit-Second: 4
+X-RateLimit-Remaining-Second: 0
+X-RateLimit-Limit-Hour: 1000000
+RateLimit-Limit: 4
+X-RateLimit-Remaining-Hour: 999752
+RateLimit-Remaining: 0
+RateLimit-Reset: 1
+X-Kong-Upstream-Latency: 3
+X-Kong-Proxy-Latency: 1
+Via: kong/2.1.4
+
+HTTP/1.1 429 Too Many Requests
+Date: Sat, 07 Nov 2020 22:21:34 GMT
+Content-Type: application/json; charset=utf-8
+Connection: keep-alive
+Retry-After: 1
+Content-Length: 41
+X-RateLimit-Limit-Second: 4
+X-RateLimit-Remaining-Second: 0
+X-RateLimit-Limit-Hour: 1000000
+RateLimit-Limit: 4
+X-RateLimit-Remaining-Hour: 999752
+RateLimit-Remaining: 0
+RateLimit-Reset: 1
+X-Kong-Response-Latency: 1
+Server: kong/2.1.4
+```
+
+
+
 
 
 
