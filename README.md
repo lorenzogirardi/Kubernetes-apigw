@@ -504,7 +504,7 @@ i've also created a global rules on the service  with max 9 reqquest per second 
 Using siege i've benchmarked the users   
 
 
-![siege_users](https://res.cloudinary.com/ethzero/image/upload/c_scale,w_1280/v1604787270/misc/siege_users.png "siege_users")
+![siege_users](https://res.cloudinary.com/ethzero/image/upload/v1604787270/misc/siege_users.png "siege_users")
 
 You can check the headers with curl  
 
