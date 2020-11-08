@@ -620,9 +620,13 @@ Example: if the rate-limiting plugin is applied twice (with different configurat
 
 ### WAF
 
-Last but not lease , the api is configured behind Cloudflare and the users  
+Last but not lease , the api is configured behind Cloudflare,    
 
-slow_user fast_user in case you want to test it on  
+the users ```slow_user fast_user``` are available in case you want to test directly the service.  
+
+Endpoint: ```https://services.k8s.it/api/```
+
+<br></br>
 
 ```$ curl -I -H "apikey:332d05445a560ee65a76aeaa372d8904" https://services.k8s.it/api/```
 ```
