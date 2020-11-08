@@ -9,6 +9,13 @@ In a modern infrastructure , especially in a microservices environment you proba
 
 *An e‑commerce site might use an API gateway to provide mobile clients with an endpoint for retrieving all product details with a single request. It invokes various services, like product info and reviews, and combines the results*
 
+<br></br>
+
+![apigw](https://res.cloudinary.com/ethzero/image/upload/v1604839631/misc/apigw.png "apigw") 
+
+<br></br>
+
+
 Some months ago i discussed about the service mesh  
 https://github.com/lorenzogirardi/kubernetes-servicemesh  
 
@@ -659,3 +666,14 @@ cf-ray: 5eee86d319770f72-MXP
 <br></br>
 
 ## Conclusion
+
+Kong is a scalable, open source API Gateway.  
+Kong runs in front of any RESTful API and is extended through Plugins, which provide extra functionality and services beyond the core platform.  
+
+The architecture is quite simple to understand and is made up of a few components…
+- Kong base-module which wraps OpenResty and Nginx and is the engine which does the actual work
+- Database layer with choice of Cassandra or Postgres to store all the configuration so it can be retrieved easily in case of failures
+- Dashboard which provides User-Interface for API administration and viewing analytics (embedded in th Enerprise, third party for the community *Konga*)  
+
+
+
