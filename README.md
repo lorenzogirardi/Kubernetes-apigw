@@ -175,7 +175,7 @@ Let's start to work...
 I've used the public kong deployment with some changes to have the database where store the configurations.
 
 Another trick is create it as a secondary *ingress* , since i've already
-and ingress in my ingrastructure , kong is done to answer on different ports
+and ingress in my infrastructure , kong is done to answer on different ports
 
 All the yaml are subdivided per role
 
