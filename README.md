@@ -593,7 +593,27 @@ RateLimit-Reset: 1
 X-Kong-Response-Latency: 1
 Server: kong/2.1.4
 ```
+<br></br>
 
+### Rules Precedence
+A plugin will always be run once and only once per request. But the configuration with which it will run depends on the entities it has been configured for.  
+
+Plugins can be configured for various entities, combination of entities, or even globally. This is useful, for example, when you wish to configure a plugin a certain way for most requests, but make authenticated requests behave slightly differently.  
+
+Therefore, there exists an order of precedence for running a plugin when it has been applied to different entities with different configurations. The rule of thumb is: the more specific a plugin is with regards to how many entities it has been configured on, the higher its priority.  
+
+The complete order of precedence when a plugin has been configured multiple times is:
+
+1. Plugins configured on a combination of: a Route, a Service, and a Consumer. (Consumer means the request must be authenticated).
+2. Plugins configured on a combination of a Route and a Consumer. (Consumer means the request must be authenticated).
+3. Plugins configured on a combination of a Service and a Consumer. (Consumer means the request must be authenticated).
+4. Plugins configured on a combination of a Route and a Service.
+5. Plugins configured on a Consumer. (Consumer means the request must be authenticated).
+6. Plugins configured on a Route.
+7. Plugins configured on a Service.
+8. Plugins configured to run globally.  
+
+Example: if the rate-limiting plugin is applied twice (with different configurations): for a Service (Plugin config A), and for a Consumer (Plugin config B), then requests authenticating this Consumer will run Plugin config B and ignore A. However, requests that do not authenticate this Consumer will fallback to running Plugin config A. Note that if config B is disabled (its enabled flag is set to false), config A will apply to requests that would have otherwise matched config B.
 
 
 
