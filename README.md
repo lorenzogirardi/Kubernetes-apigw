@@ -507,6 +507,7 @@ Using siege i've benchmarked the users
 ![siege_users](https://res.cloudinary.com/ethzero/image/upload/v1604787270/misc/siege_users.png "siege_users")
 
 You can check the headers with curl  
+```$ while true; do curl -I -H "apikey:332d05445a560ee65a76aeaa372d8904" http://api.ing.h4x0r3d.lan:30080/api/ && sleep 0.2; done```
 
 ```
 HTTP/1.1 200 OK
@@ -615,7 +616,39 @@ The complete order of precedence when a plugin has been configured multiple time
 
 Example: if the rate-limiting plugin is applied twice (with different configurations): for a Service (Plugin config A), and for a Consumer (Plugin config B), then requests authenticating this Consumer will run Plugin config B and ignore A. However, requests that do not authenticate this Consumer will fallback to running Plugin config A. Note that if config B is disabled (its enabled flag is set to false), config A will apply to requests that would have otherwise matched config B.
 
+<br></br>
 
+### WAF
+
+Last but not lease , the api is configured behind Cloudflare and the users  
+
+slow_user fast_user in case you want to test it on  
+
+```$ curl -I -H "apikey:332d05445a560ee65a76aeaa372d8904" https://services.k8s.it/api/```
+```
+HTTP/2 200
+date: Sun, 08 Nov 2020 10:14:21 GMT
+content-type: text/html; charset=utf-8
+set-cookie: __cfduid=dab5b88be5427314b7b17a1a65d3178a41604830461; expires=Tue, 08-Dec-20 10:14:21 GMT; path=/; domain=.k8s.it; HttpOnly; SameSite=Lax
+vary: Accept-Encoding
+x-ratelimit-limit-second: 4
+x-ratelimit-remaining-second: 3
+x-ratelimit-limit-hour: 1000000
+ratelimit-limit: 4
+x-ratelimit-remaining-hour: 999995
+ratelimit-remaining: 3
+ratelimit-reset: 1
+x-kong-upstream-latency: 3
+x-kong-proxy-latency: 4
+via: kong/2.1.4
+cf-cache-status: DYNAMIC
+cf-request-id: 0648f2980000000f72931c2000000001
+expect-ct: max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+report-to: {"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=z4j%2FU3og%2FT2jBByhUKZtShDNLfLMWncExIy3EowJ2hOPJ17oCB0oeyY1GVaXirT%2BgWpTEEuU%2F03gx%2F91uOy3mGD%2BFE4FhBGqFt7iC2bhaPc%3D"}],"group":"cf-nel","max_age":604800}
+nel: {"report_to":"cf-nel","max_age":604800}
+server: cloudflare
+cf-ray: 5eee86d319770f72-MXP
+```
 
 
 
