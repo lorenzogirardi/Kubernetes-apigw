@@ -675,5 +675,14 @@ The architecture is quite simple to understand and is made up of a few component
 - Database layer with choice of Cassandra or Postgres to store all the configuration so it can be retrieved easily in case of failures
 - Dashboard which provides User-Interface for API administration and viewing analytics (embedded in th Enerprise, third party for the community *Konga*)  
 
+The Powerful of Kong is also supported by plugins from authentication, security, traffic control, logging, and etc…  
+
+
+
+<br></br>
+
+If your business exposes APIs, the API GATEWAY is a required to handle the third party.
+
+
 
 
