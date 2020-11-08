@@ -12,7 +12,23 @@ spec:
     - host: api.ing.h4x0r3d.lan
       http:
         paths:
-          - path: /
+          - path: /api/
+            backend:
+              serviceName: pytbak-svc
+              servicePort: 5000
+          - path: /api/get/
+            backend:
+              serviceName: pytbak-svc
+              servicePort: 5000
+          - path: /api/post/
+            backend:
+              serviceName: pytbak-svc
+              servicePort: 5000
+          - path: /api/put/
+            backend:
+              serviceName: pytbak-svc
+              servicePort: 5000
+          - path: /api/delete/
             backend:
               serviceName: pytbak-svc
               servicePort: 5000
