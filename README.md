@@ -677,6 +677,13 @@ The architecture is quite simple to understand and is made up of a few component
 
 The Powerful of Kong is also supported by plugins from authentication, security, traffic control, logging, and etc…  
 
+Monitoring is also covered well by default kong official prometheus available here https://github.com/Kong/kong-plugin-prometheus  
+
+![kong_monitor](https://res.cloudinary.com/ethzero/image/upload/v1604953362/misc/kong.monitor.png "kong_monitor")
+
+Live: https://services.k8s.it/grafana/d/mY9p7dQmz/kong?orgId=2&refresh=1m
+
+
 
 
 <br></br>
