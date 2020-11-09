@@ -688,7 +688,7 @@ Live: https://services.k8s.it/grafana/d/mY9p7dQmz/kong?orgId=2&refresh=1m
 
 <br></br>
 
-If your business exposes APIs, the API GATEWAY is a required to handle the third party.
+**If your business exposes APIs, the API GATEWAY is a required to handle the third party.**
 
 
 
