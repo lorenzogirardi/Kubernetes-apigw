@@ -21,7 +21,7 @@ https://github.com/lorenzogirardi/kubernetes-servicemesh
 
 To better understand the differences on those products it is better to summarize the common areas
 
-![apigw_vs_servicemesh](https://res.cloudinary.com/ethzero/image/upload/c_scale,w_1024/v1604703880/misc/apigw_vs_servicemesh.png "apigw_vs_servicemesh")   
+![apigw_vs_servicemesh](https://res.cloudinary.com/ethzero/image/upload/c_scale,w_600/v1604703880/misc/apigw_vs_servicemesh.png "apigw_vs_servicemesh")   
 
 So forget about service mesh and have the focus only on the apigw.  
 
