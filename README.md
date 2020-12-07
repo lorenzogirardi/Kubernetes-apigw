@@ -696,10 +696,15 @@ The architecture is quite simple to understand and is made up of a few component
 - Dashboard which provides User-Interface for API administration and viewing analytics (embedded in th Enerprise, third party for the community *Konga*)  
 
 The Powerful of Kong is also supported by plugins from authentication, security, traffic control, logging, and etc…  
+<br></br>
+
+![uml_api_gw](https://res.cloudinary.com/ethzero/image/upload/v1605723436/misc/konf_monitor.png "uml_api_gw")
+
+<br></br>
 
 Monitoring is also covered well by default kong official prometheus available here https://github.com/Kong/kong-plugin-prometheus  
 
-![kong_monitor](https://res.cloudinary.com/ethzero/image/upload/v1605723436/misc/konf_monitor.png "kong_monitor")
+![kong_monitor](https://res.cloudinary.com/ethzero/image/upload/v1607332130/misc/UML_api_gw.png "kong_monitor")
 
 Live: https://services.k8s.it/grafana/d/mY9p7dQmz/kong?orgId=2&refresh=1m
 
