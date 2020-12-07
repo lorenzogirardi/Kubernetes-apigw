@@ -704,7 +704,7 @@ The Powerful of Kong is also supported by plugins from authentication, security,
 
 Monitoring is also covered well by default kong official prometheus available here https://github.com/Kong/kong-plugin-prometheus  
 
-![kong_monitor](https://res.cloudinary.com/ethzero/image/upload/v1607332130/misc/UML_api_gw.png "kong_monitor")
+![kong_monitor](https://res.cloudinary.com/ethzero/image/upload/v1605723436/misc/konf_monitor.png "kong_monitor")
 
 Live: https://services.k8s.it/grafana/d/mY9p7dQmz/kong?orgId=2&refresh=1m
 
