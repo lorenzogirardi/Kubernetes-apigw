@@ -71,6 +71,26 @@ On the other side on the cloud scenario we have:
 * Azure api management  
 <br></br>  
 
+|                	| nginx 	| kong      	| tyk 	| ambassador 	| aws api gw 	|
+|----------------	|-------	|-----------	|-----	|------------	|------------	|
+| basic          	| yes   	| yes       	| yes 	| yes        	| pay        	|
+| oauth          	| pay   	| yes       	| yes 	| pay        	| pay        	|
+| jwt            	| pay   	| yes       	| yes 	| pay        	| pay        	|
+| ip listing     	| yes   	| yes       	| yes 	| no         	| pay        	|
+| analytics      	| yes   	| yes       	| yes 	| yes        	| pay        	|
+| rate limiting  	| yes   	| yes       	| yes 	| yes        	| pay        	|
+| transformation 	| pay   	| yes       	| yes 	| yes        	| pay        	|
+| grpc           	| yes   	| yes       	| yes 	| yes        	| no         	|
+| websocket      	| yes   	| yes       	| yes 	| yes        	| pay        	|
+| service mesh   	| no    	| yes       	| yes 	| pay        	| no         	|
+| k8s ingress    	| yes   	| yes       	| yes 	| yes        	| no         	|
+| caching        	| yes   	| pay       	| yes 	| no         	| pay        	|
+| documentation  	| pay   	| yes       	| yes 	| no         	| pay        	|
+| admin ui       	| pay   	| trd party 	| yes 	| no         	| pay        	|
+| ease to setup  	| 3.5   	| 4         	| 2.5 	| 3          	| 5          	|
+
+<br></br>  
+
 Cloud  
 
 ![apigw_cloud](https://res.cloudinary.com/ethzero/image/upload/v1604766802/misc/apigw_cloud.png "apigw_cloud")   
