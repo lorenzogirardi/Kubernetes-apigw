@@ -698,7 +698,7 @@ The architecture is quite simple to understand and is made up of a few component
 The Powerful of Kong is also supported by plugins from authentication, security, traffic control, logging, and etc…  
 <br></br>
 
-![uml_api_gw](https://res.cloudinary.com/ethzero/image/upload/v1605723436/misc/konf_monitor.png "uml_api_gw")
+![uml_api_gw](https://res.cloudinary.com/ethzero/image/upload/c_scale,w_480/v1607332130/misc/UML_api_gw.png "uml_api_gw")
 
 <br></br>
 
